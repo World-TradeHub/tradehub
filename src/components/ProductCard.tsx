@@ -44,9 +44,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           />
           
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {/* <div className="absolute top-2 left-2 flex flex-col gap-1">
             {product.isFeatured && (
-              <Badge variant="default" className="bg-gradient-primary text-white border-0">
+              <Badge variant="default" className="bg-gradient-primary text-xs text-white border-0 py-1">
                 Featured
               </Badge>
             )}
@@ -55,7 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
                 New
               </Badge>
             )}
-          </div>
+          </div> */}
 
           {/* Favorite Button */}
           <Button
@@ -83,7 +83,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           </div>
 
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-xl font-bold text-primary">
               {product.price} {product.currency}
             </span>
           </div>
@@ -91,23 +91,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           {/* Seller Info */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-300">
                 {product.seller.username}
               </span>
               {product.seller.isVerified && (
                 <Shield size={14} className="text-primary" />
               )}
             </div>
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <Star size={12} className="text-warning fill-current" />
               <span className="text-sm text-muted-foreground">
                 {product.seller.rating}
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Location */}
-          <div className="flex items-center gap-1 text-muted-foreground">
+          <div className="flex items-center gap-1 text-black-300">
             <MapPin size={12} />
             <span className="text-xs">{product.location}</span>
           </div>

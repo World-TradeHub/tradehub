@@ -77,7 +77,7 @@ export const useProducts = (filters: ProductFilters = {}, strictSearch: boolean 
       console.log("Base products fetched:", baseProducts.length);
 
       if(!strictSearch && (filters.country && (Object.keys(filters).length === 0 && baseProducts.length < MIN_PRODUCTS) 
-        || (Object.keys(filters).length !== 0 && baseProducts.length === 0))) {
+        || (Object.keys(filters).length !== 0 && baseProducts.length < MIN_PRODUCTS))) {
 
           console.log("Fetching fallback products as country-specific results were insufficient.");
 
