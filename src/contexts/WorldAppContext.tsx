@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from "@/hooks/use-toast";
 
 interface WorldAppUser {
   id: string;
@@ -73,7 +72,6 @@ export const WorldAppProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [user, setUser] = useState<AppUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     // Load user from localStorage or set default dev user
@@ -157,11 +155,6 @@ export const WorldAppProvider: React.FC<{ children: React.ReactNode }> = ({ chil
    
       await fetchUserProfile(userId);
       setIsConnected(true);
-
-      toast({
-        title: "Connected!",
-        description: "Successfully connected with your wallet",
-      });
 
 
 
