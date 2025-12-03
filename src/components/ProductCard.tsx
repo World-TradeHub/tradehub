@@ -77,13 +77,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
         {/* Content */}
         <div className="p-4">
           <div className="mb-2">
-            <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+            <h4 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors text-sm">
               {product.title}
-            </h3>
+            </h4>
           </div>
 
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xl font-bold text-primary">
+            <span className="text-sm font-bold text-primary">
               {product.price} {product.currency}
             </span>
           </div>
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           {/* Seller Info */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-300">
+              <span className="text-xs text-300">
                 {product.seller.username}
               </span>
               {product.seller.isVerified && (
@@ -109,7 +109,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           {/* Location */}
           <div className="flex items-center gap-1 text-black-300">
             <MapPin size={12} />
-            <span className="text-xs">{product.location}</span>
+            <span className="text-xs text-300">{product.location}</span>
           </div>
         </div>
       </div>

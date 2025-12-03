@@ -11,6 +11,7 @@ interface WorldAppUser {
 interface AppUser extends WorldAppUser{
 
   isSeller: boolean,
+  displayLocation?:string,
   rating?:number
 }
 
@@ -94,7 +95,8 @@ export const WorldAppProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             profilePictureUrl: data.profile_picture_url || undefined,
             isVerified: data.is_verified,
             isSeller: data.is_seller,
-            rating: data.rating
+            rating: data.rating,
+            displayLocation:data.display_location
           });
           setIsConnected(true);
           
@@ -121,6 +123,7 @@ export const WorldAppProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       .eq('id', userId)
       .single();
 
+
     if (data && !error) {
       setUser({
         id: data.id,
@@ -129,7 +132,8 @@ export const WorldAppProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         profilePictureUrl: data.profile_picture_url || undefined,
         isVerified: data.is_verified,
         isSeller:data.is_seller,
-        rating:data.rating
+        rating:data.rating,
+        displayLocation:data.display_location
 
       });
     }

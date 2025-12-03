@@ -11,7 +11,7 @@ export interface ProductFilters {
   country?: string | null;
 }
 
-export const useProducts = (filters: ProductFilters = {}, strictSearch: boolean = false) => {
+export const useProducts = (filters: ProductFilters = {}, strictSearch: boolean = false,enabled:boolean=true) => {
   return useQuery({
     queryKey: ['products', filters],
     queryFn: async () => {
@@ -107,6 +107,7 @@ export const useProducts = (filters: ProductFilters = {}, strictSearch: boolean 
       // Transform database data to frontend format
       return baseProducts.map(transformDbProductToProduct);
     },
+    enabled: enabled
   });
 };
 
