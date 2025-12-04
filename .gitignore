@@ -25,5 +25,5 @@ dist-ssr
 .env
 
 #supabase
-supabase
-supabase/config.toml
+/supabase
+/supabase/config.toml

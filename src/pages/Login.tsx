@@ -104,6 +104,11 @@ export default function Login() {
 
       }
 
+       toast({
+        title: "Connected!",
+        description: "Successfully connected with your wallet",
+      });
+
 
       //   await login({
       //   walletAddress: "randomwallet_address_ccc",

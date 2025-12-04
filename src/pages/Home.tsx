@@ -97,11 +97,13 @@ const Home: React.FC = () => {
 
       {/* Country Filter */}
       {!countryLoading && (
+    
         <CountryFilter
           selectedCountry={selectedCountry}
           detectedCountry={detectedCountry}
           onCountryChange={handleCountryChange}
         />
+
       )}
 
       <div className="px-4 py-6 space-y-8">
@@ -126,7 +128,7 @@ const Home: React.FC = () => {
                 <Link
                   key={category.id}
                   to={`/categories/${category.slug}`}
-                  className="flex flex-col items-center p-2 rounded-lg bg-card hover:bg-muted transition-colors"
+                  className="flex flex-col items-center px-2 py-1 rounded-lg bg-card hover:bg-muted transition-colors"
                 >
                   <span className="text-2xl mb-1">{category.icon}</span>
                   <span className="text-xs text-center font-medium text-foreground">
@@ -146,13 +148,13 @@ const Home: React.FC = () => {
           </div>
           
           {featuredLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {Array.from({ length: 4 }).map((_, i) => (
                 <Skeleton key={i} className="h-72 rounded-xl" />
               ))}
             </div>
           ) : featuredProducts.filter(p => p.isFeatured).length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {featuredProducts.filter(p => p.isFeatured).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -170,13 +172,13 @@ const Home: React.FC = () => {
           </div>
           
           {recentLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {Array.from({ length: 4 }).map((_, i) => (
                 <Skeleton key={i} className="h-72 rounded-xl" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {recentProducts.slice(0, 4).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

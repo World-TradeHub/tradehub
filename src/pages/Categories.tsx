@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useParams,useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { ArrowLeft, Filter, Grid, List, Search } from 'lucide-react';
 import { ProductCard } from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
@@ -25,10 +25,10 @@ const Categories: React.FC = () => {
   const { selectedCountry, detectedCountry, isLoading: countryLoading, handleCountryChange } = useCountryFilter();
 
   const { data: categories, isLoading: categoriesLoading } = useCategories();
-  
+
   const currentCategory = categories?.find(c => c.slug === slug);
 
-  
+
   const filters: ProductFilters = {
     categoryId: currentCategory?.id,
     searchQuery: searchQuery || undefined,
@@ -36,8 +36,10 @@ const Categories: React.FC = () => {
     sortBy: sortBy as ProductFilters['sortBy'],
     country: selectedCountry,
   };
-  
-  const { data: products = [], isLoading: productsLoading } = useProducts(filters,true);
+
+  const shouldShowProducts = !!slug || searchQuery.trim().length > 0;
+
+  const { data: products = [], isLoading: productsLoading } = useProducts(filters, true, shouldShowProducts);
 
   const conditions = ['all', 'new', 'second-hand'];
   const sortOptions = [
@@ -49,10 +51,10 @@ const Categories: React.FC = () => {
   ];
 
   const handleSearchChange = (e) => {
-  const value = e.target.value;
-  setSearchQuery(value);
-  navigate(`/categories?search=${encodeURIComponent(value)}`);
-};
+    const value = e.target.value;
+    setSearchQuery(value);
+    navigate(`/categories?search=${encodeURIComponent(value)}`);
+  };
 
   return (
     <div className="pb-20">
@@ -98,7 +100,7 @@ const Categories: React.FC = () => {
             <Input
               placeholder="Search products..."
               value={searchQuery}
-              onChange={ handleSearchChange}
+              onChange={handleSearchChange}
               className="pl-10"
             />
           </div>
@@ -178,13 +180,13 @@ const Categories: React.FC = () => {
         )}
 
         {/* Products */}
-        <section>
+        {shouldShowProducts && <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">
               {currentCategory ? `${currentCategory.name} Products` : 'All Products'}
               <span className="text-muted-foreground ml-2">({products.length})</span>
             </h2>
-            
+
             {/* <Button variant="ghost" size="sm">
               <Filter size={16} className="mr-2" />
               More Filters
@@ -204,13 +206,13 @@ const Categories: React.FC = () => {
           ) : products.length > 0 ? (
             <div className={
               viewMode === 'grid'
-                ? 'grid grid-cols-1 sm:grid-cols-2 gap-4'
+                ? 'grid grid-cols-2 sm:grid-cols-2 gap-3'
                 : 'space-y-4'
             }>
               {products.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
+                <ProductCard
+                  key={product.id}
+                  product={product}
                   className={viewMode === 'list' ? 'w-full' : ''}
                 />
               ))}
@@ -225,6 +227,7 @@ const Categories: React.FC = () => {
             </div>
           )}
         </section>
+        }
       </div>
     </div>
   );

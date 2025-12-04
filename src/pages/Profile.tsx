@@ -116,6 +116,8 @@ const Profile: React.FC = () => {
     );
   }
 
+  console.log('User location:', user.displayLocation);
+
   return (
     <div className="pb-20">
       <div className="px-4 py-6">
@@ -163,8 +165,8 @@ const Profile: React.FC = () => {
                 )}
               </div>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
-                <Wallet size={14} />
-                {user.walletAddress.slice(0, 6)}...{user.walletAddress.slice(-4)}
+                
+                {user.displayLocation}
               </p>
             </div>
           </div>
