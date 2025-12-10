@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { API_URL } from "@/config/config";
 
 interface WorldAppUser {
   id: string;
@@ -41,7 +42,7 @@ export const signInUser = async ({
   profilePictureUrl?: string;
 }, nonce: string) => {
   try {
-    const res = await fetch('https://marketplace-backend-sdl0.onrender.com/api/v1/signin', {
+    const res = await fetch(`${API_URL}/api/v1/signin`, {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },

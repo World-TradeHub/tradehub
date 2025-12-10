@@ -634,6 +634,7 @@ export type Database = {
           last_message_at: string
           participant_id: string
           participant_is_verified: boolean
+          participant_is_buyer: boolean
           participant_profile_picture_url: string
           participant_username: string
           product_currency: string

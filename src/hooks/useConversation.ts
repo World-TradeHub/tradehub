@@ -24,6 +24,7 @@ export interface ConversationDetail {
     username: string;
     profilePictureUrl?: string;
     isVerified: boolean;
+    isBuyer:boolean
   };
   messages: Message[];
 }
@@ -69,6 +70,7 @@ export const useConversation = (conversationId: string) => {
           username: conversation.participant_username,
           profilePictureUrl: conversation.participant_profile_picture_url,
           isVerified: conversation.participant_is_verified,
+          isBuyer: conversation.participant_is_buyer
         },
         messages: messages.map((msg: any) => ({
           id: msg.id,

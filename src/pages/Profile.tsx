@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
           </div>
           
           <h2 className="text-2xl font-bold text-foreground mb-2">
-            Welcome to World Marketplace
+            Welcome to ShopHub
           </h2>
           <p className="text-muted-foreground mb-6">
             Connect with your wallet to start buying and selling securely
@@ -284,6 +284,15 @@ const Profile: React.FC = () => {
                   </div>
                 </a>
               )}
+              <Link to="/safety-guidelines" className="block">
+              <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
+                <Shield size={20} className="text-muted-foreground" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">Safety Guidelines</p>
+                  <p className="text-xs text-muted-foreground">Learn how to stay safe on the platform</p>
+                </div>
+              </div>
+            </Link>
             </div>
           </Card>
         )}

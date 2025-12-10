@@ -138,7 +138,7 @@ const Categories: React.FC = () => {
       </div>
 
       {/* Country Filter */}
-      {!countryLoading && (
+      {shouldShowProducts && !countryLoading && (
         <CountryFilter
           selectedCountry={selectedCountry}
           detectedCountry={detectedCountry}
@@ -146,7 +146,7 @@ const Categories: React.FC = () => {
         />
       )}
 
-      <div className="px-4 py-6">
+      <div className="px-4 pb-6 pt-2">
         {/* Categories Grid (when no specific category selected) */}
         {!slug && (
           <section className="mb-8">

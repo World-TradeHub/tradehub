@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { API_URL } from "@/config/config";
 
 interface CreatePaymentData {
   product_id: string;
@@ -18,7 +19,7 @@ export const useListingPayment = () => {
     paymentType: string;
     currency: string;
   }) => {
-    const res = await fetch('https://marketplace-backend-sdl0.onrender.com/api/v1/initiate-payment', {
+    const res = await fetch(`${API_URL}/api/v1/initiate-payment`, {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },
@@ -35,7 +36,7 @@ export const useListingPayment = () => {
 
 
    const verifyPayment = async (transactionDetails:{transaction_id:string;reference:string}) => {
-    const res = await fetch('https://marketplace-backend-sdl0.onrender.com/api/v1/verify-payment', {
+    const res = await fetch(`${API_URL}/api/v1/verify-payment`, {
       method: 'POST',
       credentials: "include",
       headers: { 'Content-Type': 'application/json' },
