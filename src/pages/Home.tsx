@@ -46,7 +46,7 @@ const Home: React.FC = () => {
               ShopHub
             </h1>
             <p className="text-muted-foreground mb-4">
-              Buy and sell to users nearby and around the world
+              Buy and sell nearby and around the world
             </p>
             
             {/* Search Bar */}

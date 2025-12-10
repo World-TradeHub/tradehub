@@ -14,7 +14,7 @@ export const LoadingScreen = ({ message = "Loading..." }: LoadingScreenProps) =>
       
       {/* App Name */}
       <h1 className="text-xl font-bold text-foreground mb-6">
-        The Markethub
+        ShopHub
       </h1>
       
       {/* Loading Spinner */}
