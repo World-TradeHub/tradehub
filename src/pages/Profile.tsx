@@ -284,6 +284,15 @@ const Profile: React.FC = () => {
                   </div>
                 </a>
               )}
+              <Link to="/safety-guidelines" className="block">
+              <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
+                <Shield size={20} className="text-muted-foreground" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">Safety Guidelines</p>
+                  <p className="text-xs text-muted-foreground">Learn how to stay safe on the platform</p>
+                </div>
+              </div>
+            </Link>
             </div>
           </Card>
         )}

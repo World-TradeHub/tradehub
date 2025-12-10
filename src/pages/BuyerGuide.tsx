@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Shield, AlertTriangle, MapPin, CheckCircle } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Shield, AlertTriangle, MapPin, CheckCircle, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
+import { usePlatformConfig } from '@/hooks/usePlatformConfig';
 
 const BuyerGuide: React.FC = () => {
+  const { data: platformConfig } = usePlatformConfig();
+  const supportContact = platformConfig?.support_contact || { email: null, phone: null };
+
   return (
     <div className="pb-20 min-h-screen bg-background">
       {/* Header */}
@@ -34,15 +38,16 @@ const BuyerGuide: React.FC = () => {
               Welcome to ShopHub
             </CardTitle>
             <CardDescription>
-              A secure platform for verified World ID users to buy and sell
+              A platform that connects buyers and sellers around the world. This guide will help you 
+              navigate the purchasing process safely and effectively.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          {/* <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-            ShopHub connects verified buyers and sellers. This guide will help you 
+            ShopHub connects  buyers and sellers. This guide will help you 
               navigate the purchasing process safely and effectively.
             </p>
-          </CardContent>
+          </CardContent> */}
         </Card>
 
         {/* How to Purchase */}
@@ -230,6 +235,35 @@ const BuyerGuide: React.FC = () => {
             </div>
           </CardContent>
         </Card> */}
+
+{(supportContact?.email || supportContact?.phone) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Need Help?</CardTitle>
+              <CardDescription>Contact our support team</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {supportContact.email && (
+                <a href={`mailto:${supportContact.email}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
+                  <Mail size={18} className="text-primary" />
+                  <div>
+                    <p className="text-sm font-medium">Email Support</p>
+                    <p className="text-xs text-muted-foreground">{supportContact.email}</p>
+                  </div>
+                </a>
+              )}
+              {supportContact.phone && (
+                <a href={`tel:${supportContact.phone}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
+                  <Phone size={18} className="text-primary" />
+                  <div>
+                    <p className="text-sm font-medium">Phone Support</p>
+                    <p className="text-xs text-muted-foreground">{supportContact.phone}</p>
+                  </div>
+                </a>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* CTA */}
         <div className="flex flex-col gap-3">

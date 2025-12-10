@@ -316,10 +316,7 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Safety Notice below buttons */}
-        <div className="px-4 pb-3 pt-0">
-          <SafetyNotice />
-        </div>
+     
       </div>
 
       {/* Contact Seller Phone Dialog */}
