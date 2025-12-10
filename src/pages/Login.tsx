@@ -3,9 +3,10 @@ import { useWorldApp } from "@/contexts/WorldAppContext";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { MiniKit } from '@worldcoin/minikit-js';
-import { User, Shield, Loader2 } from "lucide-react";
+import { User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getDefaultCountry } from "@/lib/utils";
+import { API_URL } from "@/config/config";
 
 export default function Login() {
   const { login } = useWorldApp();
@@ -65,7 +66,7 @@ export default function Login() {
 
 
 
-      const res = await fetch('https://marketplace-backend-sdl0.onrender.com/api/v1/nonce',
+      const res = await fetch(`${API_URL}/api/v1/nonce`,
         {
           credentials: "include",
           method: 'GET',
@@ -143,7 +144,7 @@ export default function Login() {
           <User size={40} className="text-white" />
         </div>
         <h2 className="text-2xl font-bold text-foreground mb-2">
-          Welcome to World Marketplace
+          Welcome to ShopHub
         </h2>
         <p className="text-muted-foreground mb-6">
           Connect with your wallet to start buying and selling securely
@@ -162,15 +163,6 @@ export default function Login() {
             "Connect Wallet"
           )}
         </Button>
-        <div className="mt-6 p-4 bg-card rounded-xl border border-border">
-          <div className="flex items-center gap-2 mb-2">
-            <Shield className="text-primary" size={20} />
-            <span className="font-medium text-foreground">Secure & Verified</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            All users are verified to ensure safe transactions
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -43,10 +43,10 @@ const Home: React.FC = () => {
         <div className="relative px-4 py-4">
           <div className="max-w-md mx-auto text-center">
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              World Marketplace
+              ShopHub
             </h1>
             <p className="text-muted-foreground mb-4">
-              Buy and sell with verified World ID users
+              Buy and sell to users nearby and around the world
             </p>
             
             {/* Search Bar */}
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
         <div className="relative h-28 overflow-hidden">
           <img
             src={heroImage}
-            alt="World Marketplace"
+            alt="ShopHub"
             className="w-full h-full object-cover opacity-20"
           />
         </div>

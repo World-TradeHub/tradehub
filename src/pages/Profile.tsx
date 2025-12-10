@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
           </div>
           
           <h2 className="text-2xl font-bold text-foreground mb-2">
-            Welcome to World Marketplace
+            Welcome to ShopHub
           </h2>
           <p className="text-muted-foreground mb-6">
             Connect with your wallet to start buying and selling securely

@@ -19,7 +19,7 @@ const BuyerGuide: React.FC = () => {
               </Button>
             </Link>
             <h1 className="text-xl font-semibold text-foreground">
-              How to Buy on World Marketplace
+              How to Buy on ShopHub
             </h1>
           </div>
         </div>
@@ -31,7 +31,7 @@ const BuyerGuide: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ShoppingBag className="text-primary" />
-              Welcome to World Marketplace
+              Welcome to ShopHub
             </CardTitle>
             <CardDescription>
               A secure platform for verified World ID users to buy and sell
@@ -39,7 +39,7 @@ const BuyerGuide: React.FC = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              World Marketplace connects verified buyers and sellers. This guide will help you 
+            ShopHub connects verified buyers and sellers. This guide will help you 
               navigate the purchasing process safely and effectively.
             </p>
           </CardContent>
