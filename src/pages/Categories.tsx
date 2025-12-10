@@ -60,8 +60,8 @@ const Categories: React.FC = () => {
     <div className="pb-20">
       {/* Header */}
       <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-4 pt-3 pb-1">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link to={slug ? '/categories' : '/'}>
                 <Button variant="ghost" size="sm">

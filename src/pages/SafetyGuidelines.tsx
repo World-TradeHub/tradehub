@@ -40,12 +40,6 @@ const SafetyGuidelines: React.FC = () => {
               Your safety is our priority. Follow these guidelines for secure transactions.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-            ShopHub connects buyers and sellers around the world. While we occassionally review sellers on the platform, we recommend following these safety guidelines to protect yourself 
-              during transactions.
-            </p>
-          </CardContent>
         </Card>
 
         {/* Safety Guidelines */}
