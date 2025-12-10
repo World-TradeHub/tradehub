@@ -91,8 +91,7 @@ const ChatConversation: React.FC = () => {
             <Link to={`/product/${conversation.product.id}`} className="flex items-center gap-3 flex-1 min-w-0">
               <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                 <img
-                  src={conversation.product.images[0]}
-                  alt={conversation.product.title}
+                  src={conversation.participant.profilePictureUrl}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -101,13 +100,7 @@ const ChatConversation: React.FC = () => {
                   <span className="font-medium text-foreground truncate">
                     {conversation.participant.username}
                   </span>
-                  {conversation.participant.isVerified && (
-                    <Shield size={14} className="text-primary flex-shrink-0" />
-                  )}
                 </div>
-                <p className="text-xs text-muted-foreground truncate">
-                  {conversation.product.title}
-                </p>
               </div>
             </Link>
           </div>

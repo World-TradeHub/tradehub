@@ -86,8 +86,7 @@ const Chat: React.FC = () => {
                 {/* Product Thumbnail */}
                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                   <img
-                    src={conversation.product.images[0]}
-                    alt={conversation.product.title}
+                    src={conversation.participant.profilePictureUrl}
                     className="w-full h-full object-cover"
                   />
                 </div>
