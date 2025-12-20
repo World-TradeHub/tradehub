@@ -15,25 +15,6 @@ export default function Login() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //    autoLoginDevUser();
-  // }, []);
-
-  // const autoLoginDevUser = async () => {
-  //   setIsLoading(true);
-  //   await login(
-  //     {
-  //       walletAddress: "test_user",
-  //       username: "test_user",
-  //       profilePictureUrl: "",
-  //     },
-  //     "dev_nonce_value"
-  //   );
-  //   navigate("/");
-  // };
-
-
-
   const handleSignIn = async () => {
     try {
 
