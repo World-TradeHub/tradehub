@@ -88,7 +88,8 @@ const App = () => (
               <Route path="/categories/:slug" element={<Categories />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/chat" element={<Chat />} />
-              <Route path="/chat/:id" element={<ChatConversation />} />
+              {/* <Route path="/chat/:id" element={<ChatConversation />} /> */}
+              <Route path="/chat-conversation" element={<ChatConversation />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/seller-onboarding" element={<SellerOnboarding />} />

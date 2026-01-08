@@ -74,7 +74,7 @@ const Categories: React.FC = () => {
             </div>
 
             {/* View Toggle */}
-            <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+            {products.length>0 && <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
@@ -92,6 +92,7 @@ const Categories: React.FC = () => {
                 <List size={14} />
               </Button>
             </div>
+            }
           </div>
 
           {/* Search */}
@@ -106,7 +107,7 @@ const Categories: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2 overflow-x-auto pb-2 mb-3">
+          {products.length>0 && <div className="flex gap-2 overflow-x-auto pb-2 mb-3">
             {conditions.map((condition) => (
               <Badge
                 key={condition}
@@ -118,9 +119,10 @@ const Categories: React.FC = () => {
               </Badge>
             ))}
           </div>
+            }
 
           {/* Sort */}
-          <div className="mb-4">
+          {products.length>0 && <div className="mb-4">
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sort by..." />
@@ -134,6 +136,7 @@ const Categories: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
+          }
         </div>
       </div>
 

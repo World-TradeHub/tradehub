@@ -626,6 +626,25 @@ export type Database = {
       }
     }
     Functions: {
+      get_conversation_from_seller_and_product: {
+        Args: { current_user_id: string; productid: string; sellerid: string }
+        Returns: {
+          created_at: string
+          id: string
+          last_message_at: string
+          participant_id: string
+          participant_is_buyer: boolean
+          participant_is_verified: boolean
+          participant_profile_picture_url: string
+          participant_username: string
+          product_currency: string
+          product_id: string
+          product_images: string[]
+          product_price: number
+          product_title: string
+          updated_at: string
+        }[]
+      }
       get_conversations_with_participant: {
         Args: { conversation_id?: string; current_user_id: string }
         Returns: {
@@ -633,8 +652,8 @@ export type Database = {
           id: string
           last_message_at: string
           participant_id: string
-          participant_is_verified: boolean
           participant_is_buyer: boolean
+          participant_is_verified: boolean
           participant_profile_picture_url: string
           participant_username: string
           product_currency: string

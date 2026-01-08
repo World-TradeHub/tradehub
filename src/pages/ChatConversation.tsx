@@ -1,37 +1,117 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Send, Shield, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useConversation } from '@/hooks/useConversation';
+import { useResolvedConversation } from '@/hooks/useResolveConversation';
+import { useCreateConversation } from '@/hooks/useCreateConversation';
 import { useSendMessage } from '@/hooks/useSendMessage';
 import { useWorldApp } from '@/contexts/WorldAppContext';
 
 const ChatConversation: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  let id = searchParams.get('conversationId');
+  const productId = searchParams.get('productId');
+  const participantId = searchParams.get('participantId');
+
   const navigate = useNavigate();
   const { user } = useWorldApp();
   const [message, setMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { data: conversation, isLoading } = useConversation(id!);
+
+
+  // Track the created conversation ID for new conversations
+  // const [createdConversationId, setCreatedConversationId] = useState<string | null>(null);
+
+  const {
+    conversationDetail,
+    isPreChat,
+    conversationLoading,
+    error,
+  } = useResolvedConversation({
+    conversationId: id,
+    participantId: participantId,
+    productId: productId,
+  });
+
+
+  if (!id && conversationDetail && conversationDetail.id) {
+
+    setSearchParams(prev => {
+      prev.set("conversationId", conversationDetail.id);
+      return prev;
+    }, { replace: true });
+  }
+
+  const createConversation = useCreateConversation();
   const sendMessageMutation = useSendMessage();
 
+
   const scrollToBottom = () => {
+    console.log('scrolling')
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [conversation?.messages]);
+  }, [conversationDetail?.messages]);
 
   const handleSend = async () => {
-    if (!message.trim() || !id) return;
+    if (!message.trim()) return;
 
-    await sendMessageMutation.mutateAsync({
-      conversationId: id,
-      content: message.trim(),
-    });
+    // let targetConversationId = createdConversationId || id;
+
+    // If new conversation, create it first
+    if (!id && productId && participantId) {
+
+      const newConv = await createConversation.mutateAsync({
+        productId: productId,
+        sellerId: participantId,
+      })
+
+      console.log('creating new convo')
+
+      if (!newConv) return;
+
+      //conversationDetail.id=newConv.id
+
+      // targetConversationId = newConv.id;
+
+      id = newConv.id
+      // setCreatedConversationId(newConv.id);
+
+      // Update URL without adding to history
+      // navigate(`/chat/${newConv.id}`, { replace: true });
+
+      await sendMessageMutation.mutateAsync({
+        conversationId: newConv.id,
+        content: message.trim(),
+      });
+
+      conversationDetail.id = id
+    }
+    else {
+      await sendMessageMutation.mutateAsync({
+        conversationId: id,
+        content: message.trim(),
+      });
+
+
+    }
+
+    // // if (!targetConversationId || targetConversationId === 'new') return;
+
+    // // Send the message
+    // await sendMessageMutation.mutateAsync({
+    //   conversationId: id,
+    //   content: message.trim(),
+    // });
+
+    // if(isPreChat){
+    //   conversationDetail.id=id
+    // }
 
     setMessage('');
   };
@@ -52,7 +132,7 @@ const ChatConversation: React.FC = () => {
     );
   }
 
-  if (isLoading) {
+  if (conversationLoading && !isPreChat) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -63,8 +143,7 @@ const ChatConversation: React.FC = () => {
     );
   }
 
-
-  if (!conversation) {
+  if (!conversationDetail) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
         <p className="text-muted-foreground mb-4">Conversation not found</p>
@@ -88,19 +167,21 @@ const ChatConversation: React.FC = () => {
               <ArrowLeft size={20} />
             </Button>
 
-            <Link to={`/product/${conversation.product.id}`} className="flex items-center gap-3 flex-1 min-w-0">
+            <Link to={`/product/${conversationDetail.product.id}`} className="flex items-center gap-3 flex-1 min-w-0">
               <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                 <img
-                  src={conversation.participant.profilePictureUrl}
+                  src={conversationDetail.participant.profilePictureUrl}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-foreground truncate">
-                    {conversation.participant.username}
+                    {conversationDetail.participant.username}
                   </span>
+
                 </div>
+
               </div>
             </Link>
           </div>
@@ -108,43 +189,43 @@ const ChatConversation: React.FC = () => {
 
         {/* Product Info Banner */}
         <Link
-          to={`/product/${conversation.product.id}`}
+          to={`/product/${conversationDetail.product.id}`}
           className="flex items-center gap-3 px-4 py-2 bg-muted/50 hover:bg-muted transition-colors"
         >
           <div className="w-12 h-12 rounded-lg overflow-hidden bg-background">
             <img
-              src={conversation.product.images[0]}
-              alt={conversation.product.title}
+              src={conversationDetail.product.images[0]}
+              alt={conversationDetail.product.title}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm truncate">{conversation.product.title}</p>
+            <p className="font-medium text-sm truncate">{conversationDetail.product.title}</p>
             <p className="text-sm text-primary font-semibold">
-              {conversation.product.price} {conversation.product.currency}
+              {conversationDetail.product.price} {conversationDetail.product.currency}
             </p>
           </div>
         </Link>
 
         {/* Safety Precaution Banner */}
-        {conversation.participant.isBuyer && <div className="mx-4 mt-3 px-3 py-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+        <div className="mx-4 mt-3 px-3 py-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
           <div className="flex items-center gap-2">
             <AlertTriangle size={14} className="text-amber-600 dark:text-amber-400 flex-shrink-0" />
             <p className="text-xs text-amber-800 dark:text-amber-200">
-              Safety Notice: Only make payments if you can trust the seller.{' '}
+              Be cautious when making purchases.{' '}
               <Link to="/safety-guidelines" className="underline font-medium hover:text-amber-900 dark:hover:text-amber-100">
                 Learn more
               </Link>
             </p>
           </div>
-        </div>}
+        </div>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {conversation.messages.length === 0 ? (
+        {conversationDetail.messages.length === 0 ? (
           <p className="text-muted-foreground text-center">No messages yet. Start the conversation!</p>
-        ) : (conversation.messages.map((msg) => {
+        ) : (conversationDetail.messages.map((msg) => {
           const isOwnMessage = msg.senderId === user.id;
           return (
             <div
@@ -153,8 +234,8 @@ const ChatConversation: React.FC = () => {
             >
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-2 ${isOwnMessage
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-foreground'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-foreground'
                   }`}
               >
                 <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
@@ -172,6 +253,31 @@ const ChatConversation: React.FC = () => {
           );
         })
         )}
+        {/* {(sendMessageMutation.isPending || createConversation.isPending) && message.trim() &&
+
+          <div
+
+            className={`flex justify-end`}
+          >
+            <div
+              className={'max-w-[75%] rounded-2xl px-4 py-2 bg-primary text-primary-foreground'}
+            >
+              <p className="text-sm whitespace-pre-wrap break-words">{`${message}`}</p>
+
+              <div className={'max-w-[75%] rounded-2xl px-4 py-2'}>
+                <p
+                  className={'text-xs mt-1 text-primary-foreground/90'}
+                >
+                  Sending...
+                </p></div>
+
+            </div>
+
+          </div>
+
+
+        } */}
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -184,11 +290,11 @@ const ChatConversation: React.FC = () => {
             onKeyPress={handleKeyPress}
             placeholder="Type a message..."
             className="flex-1"
-            disabled={sendMessageMutation.isPending}
+            disabled={sendMessageMutation.isPending || createConversation.isPending}
           />
           <Button
             onClick={handleSend}
-            disabled={!message.trim() || sendMessageMutation.isPending}
+            disabled={!message.trim() || sendMessageMutation.isPending || createConversation.isPending}
             size="icon"
             className="flex-shrink-0"
           >

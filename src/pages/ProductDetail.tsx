@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Heart, Share, MapPin, Star, Shield, MessageCircle, Phone, ExternalLink } from 'lucide-react';
 import { useProduct } from '@/hooks/useProducts';
-import { useCreateConversation } from '@/hooks/useCreateConversation';
 import { useWorldApp } from '@/contexts/WorldAppContext';
 import { useIsFavorited } from '@/hooks/useIsFavorited';
 import { useToggleFavorite } from '@/hooks/useToggleFavorite';
@@ -13,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { ContactSellerDialog } from '@/components/ContactSellerDialog';
 import { toast } from '@/hooks/use-toast';
-import { SafetyNotice } from '@/components/SafetyNotice';
+import { supabase } from '@/integrations/supabase/client';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,8 +21,8 @@ const ProductDetail: React.FC = () => {
   const { data: product, isLoading, error } = useProduct(id!);
   const { data: isFavorited = false } = useIsFavorited(id!);
   const toggleFavorite = useToggleFavorite();
-  const createConversation = useCreateConversation();
   const [showPhoneDialog, setShowPhoneDialog] = React.useState(false);
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   const handleFavoriteClick = () => {
     if (!user) {
@@ -58,16 +57,10 @@ const ProductDetail: React.FC = () => {
       return;
     }
 
-    try {
-      const conversation = await createConversation.mutateAsync({
-        productId: product.id,
-        sellerId: product.seller.id,
-      });
 
-      navigate(`/chat/${conversation.id}`);
-    } catch (error) {
-      console.error('Error creating conversation:', error);
-    }
+    navigate(`/chat-conversation?productId=${product.id}&participantId=${product.seller.id}`);
+
+   
   };
 
   const handleShare = () => {
@@ -108,9 +101,11 @@ const ProductDetail: React.FC = () => {
       <div className="pb-20">
         <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
           <div className="px-4 py-3 flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <Link to="/categories">
+              <Button variant="ghost" size="sm">
                 <ArrowLeft size={20} />
               </Button>
+            </Link>
             <h1 className="text-lg font-semibold text-foreground">Product Not Found</h1>
           </div>
         </div>
@@ -129,11 +124,11 @@ const ProductDetail: React.FC = () => {
       <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
- 
-              <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <Link to="/categories">
+              <Button variant="ghost" size="sm">
                 <ArrowLeft size={20} />
               </Button>
-
+            </Link>
             <h1 className="text-lg font-semibold text-foreground">Product Details</h1>
           </div>
 
@@ -230,38 +225,37 @@ const ProductDetail: React.FC = () => {
                 <ExternalLink size={16} />
                 {product.externalLink.length > 25 ? product.externalLink.slice(0, 25) + "…" : product.externalLink}
               </a>
-              {/* <p className="text-xs text-muted-foreground mt-1">
-                Check this seller's listing on other platforms
-              </p> */}
             </div>
           )}
 
           {/* Seller Info */}
-          <div className="bg-card rounded-xl px-4 py-2 border border-border">
-  <div className="grid grid-cols-[auto,1fr] gap-x-3">
+          <div className="bg-card rounded-xl p-4 border border-border">
+            <h3 className="font-semibold text-foreground mb-3">Seller Information</h3>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller.username}`} />
+                <AvatarFallback>{product.seller.username[0].toUpperCase()}</AvatarFallback>
+              </Avatar>
 
-    {/* Title aligned with username (column 2) */}
-    <h3 className="col-start-2 font-bold text-foreground text-l">Seller</h3>
-
-    {/* Avatar */}
-    <div className="col-start-1 row-start-2 flex items-center">
-      <Avatar className="h-12 w-12">
-        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller.username}`} />
-        <AvatarFallback>{product.seller.username[0].toUpperCase()}</AvatarFallback>
-      </Avatar>
-    </div>
-
-    {/* Username — vertically centered relative to avatar */}
-    <div className="col-start-2 row-start-2 flex items-center gap-2">
-      <span className="font-medium text-s text-foreground">
-        {product.seller.username}
-      </span>
-    </div>
-
-  </div>
-</div>
-
-
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-medium text-foreground">{product.seller.username}</span>
+                  {product.seller.isVerified && (
+                    <Shield size={16} className="text-blue-500" />
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm font-medium">{product.seller.rating}</span>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {product.seller.isVerified ? 'Verified Seller' : 'Unverified'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Product Details */}
           <div className="bg-card rounded-xl p-4 border border-border">
@@ -293,30 +287,28 @@ const ProductDetail: React.FC = () => {
       {/* Fixed Bottom CTA */}
       <div className="fixed bottom-16 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border">
         {/* CTA Buttons */}
-        <div className="px-4 py-2">
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={handleContactSeller}
-              disabled={createConversation.isPending}
-            >
-              <MessageCircle size={18} className="mr-2" />
-              {product.seller.phone ? 'Message' : 'Message Seller'}
-            </Button>
-            {product.seller.phone && product.seller.allowPhoneContact && (
+          <div className="px-4 py-2">
+            <div className="flex gap-3">
               <Button
-                className="flex-1 bg-gradient-primary text-primary-foreground"
-                onClick={() => setShowPhoneDialog(true)}
+                variant="outline"
+                className="flex-1"
+                onClick={handleContactSeller}
+                disabled={isNavigating}
               >
-                <Phone size={18} className="mr-2" />
-                Contact Seller
+                <MessageCircle size={18} className="mr-2" />
+                {product.seller.phone ? 'Message' : 'Message Seller'}
               </Button>
-            )}
+              {product.seller.phone && product.seller.allowPhoneContact && (
+                <Button
+                  className="flex-1 bg-gradient-primary text-primary-foreground"
+                  onClick={() => setShowPhoneDialog(true)}
+                >
+                  <Phone size={18} className="mr-2" />
+                  Contact Seller
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-
-     
       </div>
 
       {/* Contact Seller Phone Dialog */}
