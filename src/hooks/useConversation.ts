@@ -1,33 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useWorldApp } from '@/contexts/WorldAppContext';
-
-export interface Message {
-  id: string;
-  content: string;
-  senderId: string;
-  createdAt: string;
-  isRead: boolean;
-}
-
-export interface ConversationDetail {
-  id: string;
-  product: {
-    id: string;
-    title: string;
-    images: string[];
-    price: number;
-    currency: string;
-  };
-  participant: {
-    id: string;
-    username: string;
-    profilePictureUrl?: string;
-    isVerified: boolean;
-    isBuyer:boolean
-  };
-  messages: Message[];
-}
+import { ConversationDetail } from '@/types/Product';
 
 export const useConversation = (conversationId: string) => {
   const { user } = useWorldApp();

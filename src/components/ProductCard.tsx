@@ -58,7 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
           </div> */}
 
           {/* Favorite Button */}
-          <Button
+          {/* <Button
             size="sm"
             variant="ghost"
             className={cn(
@@ -71,7 +71,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className, on
               size={16} 
               className={cn(isFavorited && "fill-current")} 
             />
-          </Button>
+          </Button> */}
         </div>
 
         {/* Content */}

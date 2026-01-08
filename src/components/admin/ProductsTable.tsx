@@ -103,7 +103,6 @@ export function ProductsTable() {
               <SelectItem value="inactive">Inactive</SelectItem>
               <SelectItem value="paused">Paused</SelectItem>
               <SelectItem value="suspended">Suspended</SelectItem>
-              <SelectItem value="sold">Sold</SelectItem>
             </SelectContent>
           </Select>
 

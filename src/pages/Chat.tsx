@@ -80,13 +80,13 @@ const Chat: React.FC = () => {
             {filteredConversations.map((conversation) => (
               <Link
                 key={conversation.id}
-                to={`/chat/${conversation.id}`}
+                to={`/chat-conversation?conversationId=${conversation.id}`}
                 className="flex items-center gap-3 p-4 rounded-xl bg-card hover:bg-muted transition-colors"
               >
                 {/* Product Thumbnail */}
                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                   <img
-                    src={conversation.participant.profilePictureUrl}
+                    src={conversation.product.images[0]}
                     className="w-full h-full object-cover"
                   />
                 </div>
