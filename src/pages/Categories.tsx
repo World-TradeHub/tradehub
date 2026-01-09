@@ -74,7 +74,7 @@ const Categories: React.FC = () => {
             </div>
 
             {/* View Toggle */}
-            {products.length>0 && <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+            {products.length>1 && shouldShowProducts && <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
@@ -107,7 +107,7 @@ const Categories: React.FC = () => {
           </div>
 
           {/* Filters */}
-          {products.length>0 && <div className="flex gap-2 overflow-x-auto pb-2 mb-3">
+          {products.length>0 && shouldShowProducts && <div className="flex gap-2 overflow-x-auto pb-2 mb-3">
             {conditions.map((condition) => (
               <Badge
                 key={condition}
@@ -122,7 +122,7 @@ const Categories: React.FC = () => {
             }
 
           {/* Sort */}
-          {products.length>0 && <div className="mb-4">
+          {products.length>1 && shouldShowProducts && <div className="mb-4">
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sort by..." />

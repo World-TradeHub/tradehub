@@ -38,7 +38,6 @@ const ChatConversation: React.FC = () => {
 
 
   if (!id && conversationDetail && conversationDetail.id) {
-
     setSearchParams(prev => {
       prev.set("conversationId", conversationDetail.id);
       return prev;
@@ -72,8 +71,6 @@ const ChatConversation: React.FC = () => {
         sellerId: participantId,
         message:message.trim()
       })
-
-      console.log('creating new convo')
 
       if (!newConv) return;
 
