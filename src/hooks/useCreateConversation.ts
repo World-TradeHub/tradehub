@@ -9,7 +9,7 @@ export const useCreateConversation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ productId, sellerId,message }: { productId: string; sellerId: string;message:string}) => {
+    mutationFn: async ({ productId, sellerId }: { productId: string; sellerId: string;message:string}) => {
       if (!user?.id) throw new Error('User not authenticated');
 
       const { data, error } = await supabase
@@ -78,9 +78,6 @@ export const useCreateConversation = () => {
       );
 
       return { previousConversation };
-    },
-    onSettled: (_data, _, variables) => {
-      // queryClient.invalidateQueries({ queryKey: ['conversationBySellerProduct', variables.sellerId,variables.productId] });
     },
     onError: (error) => {
       toast({
