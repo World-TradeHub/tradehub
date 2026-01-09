@@ -49,10 +49,12 @@ const ChatConversation: React.FC = () => {
   const sendMessageMutation = useSendMessage();
 
 
+
   const scrollToBottom = () => {
-    console.log('scrolling')
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+
 
   useEffect(() => {
     scrollToBottom();
@@ -65,29 +67,24 @@ const ChatConversation: React.FC = () => {
 
     // If new conversation, create it first
     if (!id && productId && participantId) {
-
       const newConv = await createConversation.mutateAsync({
         productId: productId,
         sellerId: participantId,
+        message:message.trim()
       })
 
       console.log('creating new convo')
 
       if (!newConv) return;
 
-      //conversationDetail.id=newConv.id
-
-      // targetConversationId = newConv.id;
-
       id = newConv.id
-      // setCreatedConversationId(newConv.id);
-
-      // Update URL without adding to history
-      // navigate(`/chat/${newConv.id}`, { replace: true });
 
       await sendMessageMutation.mutateAsync({
         conversationId: newConv.id,
         content: message.trim(),
+        sellerId:participantId,
+        productId:productId,
+        isFirstMessage:true
       });
 
       conversationDetail.id = id
@@ -96,23 +93,13 @@ const ChatConversation: React.FC = () => {
       await sendMessageMutation.mutateAsync({
         conversationId: id,
         content: message.trim(),
-      });
+        sellerId:participantId,
+        productId:productId,
+        isFirstMessage: false
+      })
 
 
     }
-
-    // // if (!targetConversationId || targetConversationId === 'new') return;
-
-    // // Send the message
-    // await sendMessageMutation.mutateAsync({
-    //   conversationId: id,
-    //   content: message.trim(),
-    // });
-
-    // if(isPreChat){
-    //   conversationDetail.id=id
-    // }
-
     setMessage('');
   };
 
@@ -132,7 +119,7 @@ const ChatConversation: React.FC = () => {
     );
   }
 
-  if (conversationLoading && !isPreChat) {
+  if (conversationLoading && !isPreChat && !(createConversation.isSuccess || sendMessageMutation.isSuccess)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -232,10 +219,14 @@ const ChatConversation: React.FC = () => {
               key={msg.id}
               className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
             >
+              <div className="flex flex-col items-end max-w-[75%]">
               <div
-                className={`max-w-[75%] rounded-2xl px-4 py-2 ${isOwnMessage
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-foreground'
+                className={`rounded-2xl px-4 py-2 
+                  ${isOwnMessage
+                    ? msg.optimistic
+                      ? 'bg-primary/40 text-primary-foreground/80 animate-pulse'
+                      : 'bg-primary text-primary-foreground'
+                    : 'bg-muted'
                   }`}
               >
                 <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
@@ -249,34 +240,18 @@ const ChatConversation: React.FC = () => {
                   })}
                 </p>
               </div>
+              {msg.optimistic && (
+                <span className="mt-1 text-xs italic text-foreground/50 animate-pulse">
+                  Sending…
+                </span>
+              )}
+
+              </div>
+
             </div>
           );
         })
         )}
-        {/* {(sendMessageMutation.isPending || createConversation.isPending) && message.trim() &&
-
-          <div
-
-            className={`flex justify-end`}
-          >
-            <div
-              className={'max-w-[75%] rounded-2xl px-4 py-2 bg-primary text-primary-foreground'}
-            >
-              <p className="text-sm whitespace-pre-wrap break-words">{`${message}`}</p>
-
-              <div className={'max-w-[75%] rounded-2xl px-4 py-2'}>
-                <p
-                  className={'text-xs mt-1 text-primary-foreground/90'}
-                >
-                  Sending...
-                </p></div>
-
-            </div>
-
-          </div>
-
-
-        } */}
 
         <div ref={messagesEndRef} />
       </div>

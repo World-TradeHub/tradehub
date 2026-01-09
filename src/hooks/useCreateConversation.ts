@@ -1,13 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation,useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useWorldApp } from '@/contexts/WorldAppContext';
 import { toast } from '@/hooks/use-toast';
+import { nanoid } from 'nanoid';
 
 export const useCreateConversation = () => {
   const { user } = useWorldApp();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ productId, sellerId }: { productId: string; sellerId: string }) => {
+    mutationFn: async ({ productId, sellerId,message }: { productId: string; sellerId: string;message:string}) => {
       if (!user?.id) throw new Error('User not authenticated');
 
       const { data, error } = await supabase
@@ -36,6 +38,49 @@ export const useCreateConversation = () => {
       if (error) throw error;
       return data;
 
+    },
+    onMutate: async ({ message,sellerId,productId }) => {
+      await queryClient.cancelQueries({
+        queryKey: ['conversationBySellerProduct',sellerId,productId],
+      });
+
+      const previousConversation = queryClient.getQueryData([
+        'conversationBySellerProduct',
+        sellerId, productId
+      ]);
+
+      const optimisticMessage = {
+        id: `optimistic-${nanoid()}`,
+        content:message,
+        senderId: user!.id,
+        createdAt: new Date().toISOString(),
+        isRead: true,
+        optimistic: true,
+        status: 'sending',
+      };
+
+      queryClient.setQueryData(
+        ['conversationBySellerProduct', sellerId,productId],
+        (old: any) => {
+          if (!old?.conversationDetail) return old;
+
+          return {
+            ...old,
+            conversationDetail: {
+              ...old.conversationDetail,
+              messages: [
+                ...old.conversationDetail.messages,
+                optimisticMessage,
+              ],
+            },
+          };
+        }
+      );
+
+      return { previousConversation };
+    },
+    onSettled: (_data, _, variables) => {
+      // queryClient.invalidateQueries({ queryKey: ['conversationBySellerProduct', variables.sellerId,variables.productId] });
     },
     onError: (error) => {
       toast({
