@@ -39,6 +39,7 @@ const ChatConversation: React.FC = () => {
 
   if (!id && conversationDetail && conversationDetail.id) {
 
+    console.log('updating id')
     setSearchParams(prev => {
       prev.set("conversationId", conversationDetail.id);
       return prev;
