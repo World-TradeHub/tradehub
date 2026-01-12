@@ -52,13 +52,15 @@ export const useConversations = () => {
             .single();
 
           // Get unread count
-          const { count: unreadCount } = await supabase
+          
+          const unreadCount=lastMessage?.sender_id===user.id?0:(await supabase
             .from('messages')
             .select('*', { count: 'exact', head: true })
             .eq('conversation_id', conv.id)
             .eq('is_read', false)
-            .neq('sender_id', user.id);
+            .neq('sender_id', user.id)).count;
 
+          //
           // Determine who the other participant is
           // const isUserBuyer = conv.buyer_id === user.id;
           // const participant = isUserBuyer ? conv.seller : conv.buyer;
