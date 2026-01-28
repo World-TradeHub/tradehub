@@ -34,6 +34,7 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminListings from "./pages/admin/AdminListings";
 import AdminCategories from "./pages/admin/AdminCategories";
 import { useUserRole } from "./hooks/useUserRole";
+import WorldChat from "./pages/WorldChat";
 
 
 const queryClient = new QueryClient();
@@ -66,9 +67,9 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 }
 
 
-// import('eruda').then((module) => {
-//         module.default.init();
-//       });
+import('eruda').then((module) => {
+        module.default.init();
+      });
 
 
 const App = () => (
@@ -87,9 +88,9 @@ const App = () => (
               <Route path="/categories" element={<Categories />} />
               <Route path="/categories/:slug" element={<Categories />} />
               <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/chat" element={<Chat />} />
+              <Route path="/chat" element={<WorldChat url="https://world.org/chat" />} />
               {/* <Route path="/chat/:id" element={<ChatConversation />} /> */}
-              <Route path="/chat-conversation" element={<ChatConversation />} />
+              <Route path="/chat-conversation" element={<ChatConversation/>} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/seller-onboarding" element={<SellerOnboarding />} />
