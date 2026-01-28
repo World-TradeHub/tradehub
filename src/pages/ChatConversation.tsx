@@ -9,6 +9,15 @@ import { useSendMessage } from '@/hooks/useSendMessage';
 import { useWorldApp } from '@/contexts/WorldAppContext';
 
 const ChatConversation: React.FC = () => {
+
+
+
+    useEffect(() => {
+      window.location.href = 'https://world.org/chat';
+    }, []);
+  
+    return null;
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   let id = searchParams.get('conversationId');

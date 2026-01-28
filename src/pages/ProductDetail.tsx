@@ -14,6 +14,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ContactSellerDialog } from '@/components/ContactSellerDialog';
 import { toast } from '@/hooks/use-toast';
 import { SafetyNotice } from '@/components/SafetyNotice';
+import { MiniKit} from '@worldcoin/minikit-js'
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,40 +29,40 @@ const ProductDetail: React.FC = () => {
 
   // const WORLD_CHAT_APP_ID = "app_e293fcd0565f45ca296aa317212d8741";
 
-function getWorldChatDeeplinkUrl({
-  username,
-  message,
-  pay,
-  request,
-}: {
-  username: string;
-  message?: string;
-  pay?: string | number|boolean;
-  request?: string | number|boolean;
-}) {
-  let path = `/${username}/draft`;
+  function getWorldChatDeeplinkUrl({
+    username,
+    message,
+    pay,
+    request,
+  }: {
+    username: string;
+    message?: string;
+    pay?: string | number | boolean;
+    request?: string | number | boolean;
+  }) {
+    let path = `/${username}/draft`;
 
-  const WORLD_CHAT_APP_ID = import.meta.env.VITE_APP_ID;
+    const WORLD_CHAT_APP_ID = 'app_e293fcd0565f45ca296aa317212d8741';
 
-  if (message) {
-    path += `?message=${message}`;
-  } else if (pay !== undefined) {
-    if (pay === "true" || pay === true) {
-      path += `?pay`;
-    } else {
-      path += `?pay=${pay}`; // Pay with amount
+    if (message) {
+      path += `?message=${message}`;
+    } else if (pay !== undefined) {
+      if (pay === "true" || pay === true) {
+        path += `?pay`;
+      } else {
+        path += `?pay=${pay}`; // Pay with amount
+      }
+    } else if (request !== undefined) {
+      if (request === "true" || request === true) {
+        path += `?request`;
+      } else {
+        path += `?request=${request}`; // Request with amount
+      }
     }
-  } else if (request !== undefined) {
-    if (request === "true" || request === true) {
-      path += `?request`;
-    } else {
-      path += `?request=${request}`; // Request with amount
-    }
+
+    const encodedPath = encodeURIComponent(path);
+    return `https://world.org/mini-app?app_id=${WORLD_CHAT_APP_ID}&path=${encodedPath}`;
   }
-
-  const encodedPath = encodeURIComponent(path);
-  return `https://worldcoin.org/mini-app?app_id=${WORLD_CHAT_APP_ID}&path=${encodedPath}`;
-}
 
   const handleFavoriteClick = () => {
     if (!user) {
@@ -96,15 +97,44 @@ function getWorldChatDeeplinkUrl({
       return;
     }
 
-    // navigate(`/chat-conversation?productId=${product.id}&participantId=${product.seller.id}`);
-    const url = getWorldChatDeeplinkUrl({
-      username: 'bernyp',
-      message: '',
-    });
-    const windowName = "_blank"; // Opens in a new tab/window
-    const windowFeatures = "width=600,height=400,resizable=yes,scrollbars=yes"; // Optional features
+    
 
-    window.open(url);
+    // navigate(`/chat-conversation?productId=${product.id}&participantId=${product.seller.id}`);
+
+
+    // window.open(`https://world.org/profile?username=bernyp&action=chat`);
+
+  
+
+    // console.log("Opening link", link);
+
+  // window.location.href = link;
+
+    // window.open(link);
+    
+    // if (!MiniKit.isInstalled()) {
+    //   return
+    // }
+
+    let username = user.id==='9b9fb067-d0a8-40f5-92fc-71687e57f7b0' ? 'dann85.6341':'bernyp'
+
+     window.location.href=`https://world.org/profile?username=${username}&action=chat`;
+
+
+    // MiniKit.showProfileCard('bernyp')
+
+
+    // const { finalPayload } = await MiniKit.commandsAsync.chat({
+    //   message: "Hi, testing chat", // Required
+    //   to: ["bernyp", "0x682d1e61a930c28cb2e963fef8ca009bf0c89df5"], // Optional: usernames or addresses, pre-selects them in the modal
+    // })
+
+    // if (finalPayload.status === "error") {
+    //   console.log("Error:", finalPayload.error_code)
+    //   return
+    // }
+
+    // console.log(`Message shared to ${finalPayload.count} chats`)
   };
 
   const handleShare = () => {
@@ -146,8 +176,8 @@ function getWorldChatDeeplinkUrl({
         <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
           <div className="px-4 py-3 flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-                <ArrowLeft size={20} />
-              </Button>
+              <ArrowLeft size={20} />
+            </Button>
             <h1 className="text-lg font-semibold text-foreground">Product Not Found</h1>
           </div>
         </div>
@@ -166,10 +196,10 @@ function getWorldChatDeeplinkUrl({
       <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
- 
-              <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-                <ArrowLeft size={20} />
-              </Button>
+
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+              <ArrowLeft size={20} />
+            </Button>
 
             <h1 className="text-lg font-semibold text-foreground">Product Details</h1>
           </div>
@@ -275,28 +305,28 @@ function getWorldChatDeeplinkUrl({
 
           {/* Seller Info */}
           <div className="bg-card rounded-xl px-4 py-2 border border-border">
-  <div className="grid grid-cols-[auto,1fr] gap-x-3">
+            <div className="grid grid-cols-[auto,1fr] gap-x-3">
 
-    {/* Title aligned with username (column 2) */}
-    <h3 className="col-start-2 font-bold text-foreground text-l">Seller</h3>
+              {/* Title aligned with username (column 2) */}
+              <h3 className="col-start-2 font-bold text-foreground text-l">Seller</h3>
 
-    {/* Avatar */}
-    <div className="col-start-1 row-start-2 flex items-center">
-      <Avatar className="h-12 w-12">
-        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller.username}`} />
-        <AvatarFallback>{product.seller.username[0].toUpperCase()}</AvatarFallback>
-      </Avatar>
-    </div>
+              {/* Avatar */}
+              <div className="col-start-1 row-start-2 flex items-center">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller.username}`} />
+                  <AvatarFallback>{product.seller.username[0].toUpperCase()}</AvatarFallback>
+                </Avatar>
+              </div>
 
-    {/* Username — vertically centered relative to avatar */}
-    <div className="col-start-2 row-start-2 flex items-center gap-2">
-      <span className="font-medium text-s text-foreground">
-        {product.seller.username}
-      </span>
-    </div>
+              {/* Username — vertically centered relative to avatar */}
+              <div className="col-start-2 row-start-2 flex items-center gap-2">
+                <span className="font-medium text-s text-foreground">
+                  {product.seller.username}
+                </span>
+              </div>
 
-  </div>
-</div>
+            </div>
+          </div>
 
 
 
@@ -353,7 +383,7 @@ function getWorldChatDeeplinkUrl({
           </div>
         </div>
 
-     
+
       </div>
 
       {/* Contact Seller Phone Dialog */}
