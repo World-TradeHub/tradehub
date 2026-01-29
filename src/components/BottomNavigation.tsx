@@ -27,7 +27,7 @@ export const BottomNavigation: React.FC = () => {
     }
     // if (item.isExternal) {
     //   e.preventDefault(); // STOP React Router from changing the internal URL
-    //   window.open(item.to,'_top'); // Trigger the external app switch
+    //   window.location.assign(item.to,); // Trigger the external app switch
     //   return;
     // }
   };

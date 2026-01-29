@@ -245,7 +245,7 @@ const Profile: React.FC = () => {
                 <Badge className="bg-primary">{favorites.length}</Badge>
               )}
             </Link>
-            <Link to="/chat" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">
+            {/* <Link to="/chat" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">
               <div className="flex items-center gap-3">
                 <MessageCircle size={20} className="text-muted-foreground" />
                 <span className="text-foreground">Messages</span>
@@ -253,7 +253,7 @@ const Profile: React.FC = () => {
               {conversations.length > 0 && (
                 <Badge className="bg-primary">{conversations.length}</Badge>
               )}
-            </Link>
+            </Link> */}
           </div>
         </Card>
 

@@ -77,6 +77,13 @@ const ProductDetail: React.FC = () => {
   };
 
   const handleContactSeller = async () => {
+     if (!MiniKit.isInstalled()) {
+              toast({
+                title: "MiniKit Not Installed",
+                description: "You need to run app inside worldapp",
+              });
+              return
+            }
     if (!user) {
       toast({
         title: 'Authentication required',
@@ -86,7 +93,7 @@ const ProductDetail: React.FC = () => {
       return;
     }
 
-    if (!product) return;
+    if (!product || !product.seller || !product.seller.worldAppUsername) return;
 
     // Don't allow contacting yourself
     if (product.seller.id === user.id) {
@@ -97,44 +104,10 @@ const ProductDetail: React.FC = () => {
       return;
     }
 
-    
-
     // navigate(`/chat-conversation?productId=${product.id}&participantId=${product.seller.id}`);
 
-
-    // window.open(`https://world.org/profile?username=bernyp&action=chat`);
-
+     window.location.href=`https://world.org/profile?username=${product.seller.worldAppUsername}&action=chat`;
   
-
-    // console.log("Opening link", link);
-
-  // window.location.href = link;
-
-    // window.open(link);
-    
-    // if (!MiniKit.isInstalled()) {
-    //   return
-    // }
-
-    let username = user.id==='9b9fb067-d0a8-40f5-92fc-71687e57f7b0' ? 'dann85.6341':'bernyp'
-
-     window.location.href=`https://world.org/profile?username=${username}&action=chat`;
-
-
-    // MiniKit.showProfileCard('bernyp')
-
-
-    // const { finalPayload } = await MiniKit.commandsAsync.chat({
-    //   message: "Hi, testing chat", // Required
-    //   to: ["bernyp", "0x682d1e61a930c28cb2e963fef8ca009bf0c89df5"], // Optional: usernames or addresses, pre-selects them in the modal
-    // })
-
-    // if (finalPayload.status === "error") {
-    //   console.log("Error:", finalPayload.error_code)
-    //   return
-    // }
-
-    // console.log(`Message shared to ${finalPayload.count} chats`)
   };
 
   const handleShare = () => {
