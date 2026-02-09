@@ -6,8 +6,6 @@ import { MiniKit } from '@worldcoin/minikit-js';
 import { User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getDefaultCountry } from "@/lib/utils";
-import { API_URL } from "@/config/config";
-import crypto from 'crypto';
 
 export default function Login() {
   const { login } = useWorldApp();
@@ -19,26 +17,26 @@ export default function Login() {
   const handleSignIn = async () => {
     try {
 
-      try {
+      // try {
 
-        if (!MiniKit.isInstalled()) {
-          toast({
-            title: "MiniKit Not Installed",
-            description: "You need to run app inside worldapp",
-          });
-          return
-        }
-      }
-      catch (error) {
-        toast({
-          title: "MiniKit Not Installed",
-          description: "You need to run app inside worldapp",
-        });
-        return
-      }
+      //   if (!MiniKit.isInstalled()) {
+      //     toast({
+      //       title: "MiniKit Not Installed",
+      //       description: "You need to run app inside worldapp",
+      //     });
+      //     return
+      //   }
+      // }
+      // catch (error) {
+      //   toast({
+      //     title: "MiniKit Not Installed",
+      //     description: "You need to run app inside worldapp",
+      //   });
+      //   return
+      // }
 
 
-      setIsLoading(true);
+      // setIsLoading(true);
 
 
 
@@ -59,7 +57,7 @@ export default function Login() {
       // )
       // const { nonce } = await res.json()
 
-      const nonce = crypto.randomUUID().replace(/-/g, "");
+      const nonce = Math.random().toString(36).substring(2, 36);
 
       // if (!nonce) throw new Error("An error occurred. Please try again.");
 
