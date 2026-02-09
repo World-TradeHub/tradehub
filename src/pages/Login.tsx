@@ -17,28 +17,26 @@ export default function Login() {
   const handleSignIn = async () => {
     try {
 
-      // try {
+      try {
 
-      //   if (!MiniKit.isInstalled()) {
-      //     toast({
-      //       title: "MiniKit Not Installed",
-      //       description: "You need to run app inside worldapp",
-      //     });
-      //     return
-      //   }
-      // }
-      // catch (error) {
-      //   toast({
-      //     title: "MiniKit Not Installed",
-      //     description: "You need to run app inside worldapp",
-      //   });
-      //   return
-      // }
-
-
-      // setIsLoading(true);
+        if (!MiniKit.isInstalled()) {
+          toast({
+            title: "MiniKit Not Installed",
+            description: "You need to run app inside worldapp",
+          });
+          return
+        }
+      }
+      catch (error) {
+        toast({
+          title: "MiniKit Not Installed",
+          description: "You need to run app inside worldapp",
+        });
+        return
+      }
 
 
+      setIsLoading(true);
 
 
       //console.log("MiniKit is installed");
